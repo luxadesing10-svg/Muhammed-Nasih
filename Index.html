@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammed Nasih</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+
+body{
+  background:#080808;
+  color:white;
+  text-align:center;
+}
+
+.page{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+h1{font-size:40px;margin-bottom:10px}
+.subtitle{color:#aaa;margin-bottom:30px}
+
+.buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+button{
+  border:0;
+  border-radius:25px;
+  padding:13px 25px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.explore{background:white;color:#111}
+.play{background:#ffd700;color:#111}
+
+#details,#gamePage{display:none;min-height:100vh;padding:35px 15px}
+
+.card{
+  max-width:600px;
+  margin:auto;
+  background:#181818;
+  padding:30px;
+  border-radius:20px;
+  text-align:left;
+}
+
+.card h2{text-align:center;margin-bottom:25px}
+.card p{margin:18px 0}
+
+#gamePage{
+  background:#1a1a2e;
+}
+
+#gamePage h2{
+  color:#ffd700;
+  margin-bottom:8px;
+}
+
+#scoreboard{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+#hearts{letter-spacing:2px}
+
+.gameArea{
+  position:relative;
+  display:inline-block;
+}
+
+canvas{
+  background:#333;
+  border:3px solid #ffd700;
+  border-radius:8px;
+  max-width:90vw;
+  touch-action:none;
+}
+
+#topBar{
+  position:absolute;
+  top:6px;
+  right:6px;
+  display:flex;
+  gap:5px;
+}
+
+#topBar button{
+  width:34px;
+  height:34px;
+  padding:0;
+  border-radius:6px;
+  background:rgba(0,0,0,.6);
+  color:#ffd700;
+}
+
+#overlay,#pauseOverlay{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,.9);
+  padding:20px;
+  border-radius:10px;
+  width:220px;
+  display:none;
+}
+
+#controls{
+  margin-top:12px;
+  display:flex;
+  justify-content:center;
+  gap:40px;
+}
+
+#controls button{
+  width:70px;
+  height:55px;
+  background:#16324f;
+  color:#ffd700;
+  font-size:22px;
+  border-radius:8px;
+}
+
+.back{
+  margin-top:20px;
+  background:white;
+  color:#111;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME -->
+<section id="home" class="page">
+
+  <h1>Muhammed Nasih</h1>
+
+  <p class="subtitle">
+    Editor • Computer
+  </p>
+
+  <div class="buttons">
+    <button class="explore" onclick="showDetails()">
+      Explore Now
+    </button>
+
+    <button class="play" onclick="openGame()">
+      🎮 Play
+    </button>
+  </div>
+
+</section>
+
+
+<!-- PROFILE -->
+<section id="details">
+
+  <div class="card">
+
+    <h2>About Muhammed Nasih</h2>
+
+    <p><b>Name:</b> Muhammed Nasih</p>
+    <p><b>Location:</b> Malappuram</p>
+    <p><b>Profession:</b> Editor, Computer</p>
+    <p><b>Skills:</b> Editing, Coding</p>
+    <p><b>Contact:</b> luxadesing10</p>
+
+    <button class="back" onclick="goHome()">
+      ← Back
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- GAME -->
+<section id="gamePage">
+
+  <h2>🏎️ CAR RACE</h2>
+
+  <div id="scoreboard">
+    <span>Score: <span id="score">0</span></span>
+    <span>Best: <span id="best">0</span></span>
+    <span id="level">Lvl 1</span>
+    <span id="hearts">❤❤❤</span>
+  </div>
+
+  <div class="gameArea">
+
+    <canvas id="game" width="300" height="420"></canvas>
+
+    <div id="topBar">
+      <button onclick="togglePause()" id="pauseBtn">⏸</button>
+      <button onclick="toggleSound()" id="soundBtn">🔊</button>
+    </div>
+
+    <div id="overlay">
+      <h3>Game Over</h3>
+      <p id="finalScore"></p>
+      <button onclick="startGame()">Play Again</button>
+    </div>
+
+    <div id="pauseOverlay">
+      <h3>Paused</h3>
+      <button onclick="togglePause()">Resume</button>
+    </div>
+
+  </div>
+
+  <div id="controls">
+    <button onclick="moveLeft()">◀</button>
+    <button onclick="moveRight()">▶</button>
+  </div>
+
+  <button class="back" onclick="closeGame()">
+    ← Back to Profile
+  </button>
+
+</section>
+
+
+<script>
+
+/* PAGE NAVIGATION */
+
+function showDetails(){
+  home.style.display="none";
+  details.style.display="block";
+}
+
+function goHome(){
+  details.style.display="none";
+  gamePage.style.display="none";
+  home.style.display="flex";
+}
+
+function openGame(){
+  home.style.display="none";
+  details.style.display="none";
+  gamePage.style.display="block";
+  startGame();
+}
+
+function closeGame(){
+  gameOver=true;
+  cancelAnimationFrame(loop);
+  gamePage.style.display="none";
+  home.style.display="flex";
+}
+
+
+/* CAR GAME */
+
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+const W=300,H=420;
+const lanes=3;
+const laneW=W/lanes;
+
+let playerLane;
+let obstacles;
+let coins;
+let score;
+let best=Number(localStorage.getItem("carBest")||0);
+let lives;
+let speed;
+let loop;
+let spawn;
+let coinSpawn;
+let road;
+let gameOver;
+let paused;
+let sound=true;
+
+document.getElementById("best").textContent=best;
+
+
+function startGame(){
+
+  playerLane=1;
+  obstacles=[];
+  coins=[];
+  score=0;
+  lives=3;
+  speed=4;
+  spawn=0;
+  coinSpawn=0;
+  road=0;
+  gameOver=false;
+  paused=false;
+
+  document.getElementById("overlay").style.display="none";
+  document.getElementById("pauseOverlay").style.display="none";
+
+  updateUI();
+
+  cancelAnimationFrame(loop);
+  loop=requestAnimationFrame(gameLoop);
+}
+
+
+function updateUI(){
+
+  document.getElementById("score").textContent=score;
+  document.getElementById("best").textContent=best;
+
+  document.getElementById("level").textContent=
+    "Lvl "+(1+Math.floor(score/10));
+
+  document.getElementById("hearts").textContent=
+    "❤".repeat(lives)+"♡".repeat(3-lives);
+}
+
+
+function xPos(lane){
+  return lane*laneW+laneW/2-22;
+}
+
+
+function moveLeft(){
+  if(!paused && playerLane>0) playerLane--;
+}
+
+
+function moveRight(){
+  if(!paused && playerLane<2) playerLane++;
+}
+
+
+function spawnCar(){
+
+  obstacles.push({
+    lane:Math.floor(Math.random()*3),
+    y:-74,
+    color:["#ff5c5c","#5cb8ff","#7dff5c","#ff9d5c","#c95cff"]
+      [Math.floor(Math.random()*5)]
+  });
+}
+
+
+function spawnCoin(){
+
+  coins.push({
+    lane:Math.floor(Math.random()*3),
+    y:-20
+  });
+}
+
+
+function gameLoop(){
+
+  if(gameOver)return;
+
+  if(!paused){
+
+    spawn++;
+
+    if(spawn>Math.max(26,55-Math.floor(score/5))){
+      spawnCar();
+      spawn=0;
+    }
+
+    coinSpawn++;
+
+    if(coinSpawn>90){
+      if(Math.random()<.6)spawnCoin();
+      coinSpawn=0;
+    }
+
+    road=(road+speed)%40;
+
+    obstacles.forEach(o=>o.y+=speed);
+    coins.forEach(c=>c.y+=speed);
+
+    const playerY=H-90;
+    const px=xPos(playerLane);
+
+    obstacles=obstacles.filter(o=>{
+
+      if(o.y>H){
+        score++;
+        updateUI();
+        return false;
+      }
+
+      if(
+        o.lane===playerLane &&
+        o.y<playerY+74 &&
+        o.y+74>playerY
+      ){
+        lives--;
+        updateUI();
+
+        if(lives<=0){
+          endGame();
+        }
+
+        return false;
+      }
+
+      return true;
+    });
+
+
+    coins=coins.filter(c=>{
+
+      if(c.y>H)return false;
+
+      if(
+        c.lane===playerLane &&
+        c.y<playerY+74 &&
+        c.y+20>playerY
+      ){
+        score+=3;
+        updateUI();
+        return false;
+      }
+
+      return true;
+    });
+
+    speed=4+score*.08;
+
+    draw(px,playerY);
+  }
+
+  loop=requestAnimationFrame(gameLoop);
+}
+
+
+function drawCar(x,y,color){
+
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  ctx.roundRect(x+2,y,40,74,10);
+  ctx.fill();
+
+  ctx.fillStyle="rgba(30,30,40,.8)";
+  ctx.fillRect(x+9,y+12,26,17);
+  ctx.fillRect(x+9,y+47,26,15);
+
+  ctx.fillStyle="#fff6c9";
+  ctx.fillRect(x+7,y+5,7,5);
+  ctx.fillRect(x+30,y+5,7,5);
+
+  ctx.fillStyle="#111";
+  ctx.fillRect(x-2,y+12,6,16);
+  ctx.fillRect(x+38,y+12,6,16);
+  ctx.fillRect(x-2,y+50,6,16);
+  ctx.fillRect(x+38,y+50,6,16);
+}
+
+
+function draw(px,py){
+
+  ctx.fillStyle="#333";
+  ctx.fillRect(0,0,W,H);
+
+  ctx.strokeStyle="#666";
+  ctx.lineWidth=3;
+  ctx.setLineDash([20,16]);
+
+  for(let i=1;i<3;i++){
+    ctx.beginPath();
+    ctx.moveTo(i*laneW,road-40);
+    ctx.lineTo(i*laneW,H);
+    ctx.stroke();
+  }
+
+  ctx.setLineDash([]);
+
+  coins.forEach(c=>{
+    const cx=xPos(c.lane)+22;
+
+    ctx.fillStyle="#ffd700";
+    ctx.beginPath();
+    ctx.arc(cx,c.y+10,9,0,Math.PI*2);
+    ctx.fill();
+  });
+
+  obstacles.forEach(o=>{
+    drawCar(xPos(o.lane),o.y,o.color);
+  });
+
+  drawCar(px,py,"#ffd700");
+}
+
+
+function endGame(){
+
+  gameOver=true;
+
+  if(score>best){
+    best=score;
+    localStorage.setItem("carBest",best);
+  }
+
+  updateUI();
+
+  document.getElementById("finalScore").textContent=
+    "Score: "+score;
+
+  document.getElementById("overlay").style.display="block";
+}
+
+
+function togglePause(){
+
+  if(gameOver)return;
+
+  paused=!paused;
+
+  document.getElementById("pauseOverlay").style.display=
+    paused?"block":"none";
+
+  document.getElementById("pauseBtn").textContent=
+    paused?"▶":"⏸";
+}
+
+
+function toggleSound(){
+
+  sound=!sound;
+
+  document.getElementById("soundBtn").textContent=
+    sound?"🔊":"🔇";
+}
+
+
+/* KEYBOARD */
+
+document.addEventListener("keydown",e=>{
+
+  if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")
+    moveLeft();
+
+  if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")
+    moveRight();
+
+  if(e.key===" ")
+    togglePause();
+});
+
+
+/* TOUCH SWIPE */
+
+let touchX=0;
+
+canvas.addEventListener("touchstart",e=>{
+  touchX=e.touches[0].clientX;
+});
+
+canvas.addEventListener("touchend",e=>{
+
+  const dx=e.changedTouches[0].clientX-touchX;
+
+  if(dx>25)moveRight();
+  else if(dx<-25)moveLeft();
+});
+
+</script>
+
+</body>
+</html>
