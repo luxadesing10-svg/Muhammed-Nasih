@@ -1,581 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="google-site-verification" content="FCyH-ZM6UFvYmjobWDHGQEaVEb1QskYR8-V9tUjyq8U" />
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muhammed Nasih</title>
+
+<meta name="description"
+content="Muhammed Nasih - Gamer, Coder, Computer enthusiast and Editor.">
+
+<title>Muhammed Nasih | Gaming Zone</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#000;
+    color:white;
+}
 
 body{
-  background:#080808;
-  color:white;
-  text-align:center;
+    overflow-x:hidden;
 }
+
+/* ---------------- PAGE ---------------- */
 
 .page{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
+    min-height:100vh;
+    display:none;
+    position:relative;
+
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+
+    padding:70px 25px;
 }
 
-h1{font-size:40px;margin-bottom:10px}
-.subtitle{color:#aaa;margin-bottom:30px}
-
-.buttons{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:center;
+.page.active{
+    display:flex;
 }
+
+/* Dark overlay */
+
+.page::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.38);
+    z-index:0;
+}
+
+/* Content */
+
+.content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:1000px;
+    margin:auto;
+}
+
+/* ---------------- PAGE 1 ---------------- */
+
+#page1{
+    background-image:url("page1-bg.jpg");
+    align-items:center;
+    justify-content:center;
+}
+
+.page1-content{
+    max-width:850px;
+}
+
+.page1-content h1{
+    font-size:clamp(42px,9vw,85px);
+    letter-spacing:5px;
+    text-shadow:0 0 25px #a900ff;
+    margin-bottom:15px;
+}
+
+.page1-content .role{
+    font-size:clamp(15px,3vw,22px);
+    letter-spacing:3px;
+    color:#d8a6ff;
+    font-weight:bold;
+}
+
+.page1-content p{
+    max-width:600px;
+    margin:25px 0;
+    line-height:1.8;
+    color:#eeeeee;
+    font-size:17px;
+}
+
+/* ---------------- BUTTON ---------------- */
 
 button{
-  border:0;
-  border-radius:25px;
-  padding:13px 25px;
-  font-weight:bold;
-  cursor:pointer;
+    border:none;
+    padding:15px 35px;
+    border-radius:30px;
+
+    background:#ffffff;
+    color:#111;
+
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    transition:0.25s;
 }
 
-.explore{background:white;color:#111}
-.play{background:#ffd700;color:#111}
-
-#details,#gamePage{display:none;min-height:100vh;padding:35px 15px}
-
-.card{
-  max-width:600px;
-  margin:auto;
-  background:#181818;
-  padding:30px;
-  border-radius:20px;
-  text-align:left;
+button:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 25px rgba(255,255,255,0.6);
 }
 
-.card h2{text-align:center;margin-bottom:25px}
-.card p{margin:18px 0}
-
-#gamePage{
-  background:#1a1a2e;
+.next-button{
+    margin-left:8px;
 }
 
-#gamePage h2{
-  color:#ffd700;
-  margin-bottom:8px;
+.back-button{
+    background:rgba(0,0,0,0.7);
+    color:white;
+    border:1px solid rgba(255,255,255,0.4);
 }
 
-#scoreboard{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  font-size:14px;
-  margin-bottom:8px;
+/* ---------------- PAGE 2 ---------------- */
+
+#page2{
+    background-image:url("page2-bg.jpg");
+    align-items:center;
 }
 
-#hearts{letter-spacing:2px}
-
-.gameArea{
-  position:relative;
-  display:inline-block;
+.page2-box{
+    max-width:600px;
+    margin-left:5%;
 }
 
-canvas{
-  background:#333;
-  border:3px solid #ffd700;
-  border-radius:8px;
-  max-width:90vw;
-  touch-action:none;
+.page2-box h2{
+    font-size:clamp(38px,8vw,70px);
+    margin-bottom:20px;
+    text-shadow:0 0 20px #9b00ff;
 }
 
-#topBar{
-  position:absolute;
-  top:6px;
-  right:6px;
-  display:flex;
-  gap:5px;
+.page2-box .line{
+    width:90px;
+    height:4px;
+    background:#b100ff;
+    margin-bottom:25px;
 }
 
-#topBar button{
-  width:34px;
-  height:34px;
-  padding:0;
-  border-radius:6px;
-  background:rgba(0,0,0,.6);
-  color:#ffd700;
+.page2-box p{
+    line-height:1.8;
+    font-size:17px;
+    color:#eeeeee;
+    margin-bottom:25px;
 }
 
-#overlay,#pauseOverlay{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:rgba(0,0,0,.9);
-  padding:20px;
-  border-radius:10px;
-  width:220px;
-  display:none;
+.skills{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin:25px 0;
 }
 
-#controls{
-  margin-top:12px;
-  display:flex;
-  justify-content:center;
-  gap:40px;
+.skill{
+    padding:18px;
+    background:rgba(0,0,0,0.62);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:12px;
 }
 
-#controls button{
-  width:70px;
-  height:55px;
-  background:#16324f;
-  color:#ffd700;
-  font-size:22px;
-  border-radius:8px;
+.skill strong{
+    color:#d49aff;
+    font-size:17px;
 }
 
-.back{
-  margin-top:20px;
-  background:white;
-  color:#111;
+.skill span{
+    display:block;
+    margin-top:7px;
+    color:#ccc;
+    font-size:13px;
+    line-height:1.5;
 }
+
+/* ---------------- PAGE 3 ---------------- */
+
+#page3{
+    background-image:url("page3-bg.jpg");
+    align-items:center;
+}
+
+.page3-box{
+    max-width:620px;
+    margin-left:4%;
+}
+
+.page3-box h2{
+    font-size:clamp(38px,8vw,70px);
+    line-height:1.05;
+    margin-bottom:15px;
+    color:#fff;
+    text-shadow:0 0 15px rgba(255,120,0,0.5);
+}
+
+.page3-box .small-title{
+    color:#ffd09a;
+    letter-spacing:4px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.page3-box p{
+    color:#eeeeee;
+    line-height:1.8;
+    font-size:17px;
+    margin-bottom:25px;
+}
+
+.game-box{
+    margin-top:30px;
+    padding:25px;
+
+    background:rgba(0,0,0,0.68);
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:18px;
+
+    max-width:430px;
+}
+
+.game-box h3{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.game-box p{
+    font-size:14px;
+    margin-bottom:10px;
+    color:#ccc;
+}
+
+/* ---------------- NAV ---------------- */
+
+.page-number{
+    position:absolute;
+    top:25px;
+    right:30px;
+
+    z-index:5;
+
+    font-size:12px;
+    letter-spacing:3px;
+    color:rgba(255,255,255,0.75);
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media(max-width:650px){
+
+    .page{
+        padding:60px 20px;
+        background-position:center;
+    }
+
+    .page1-content h1{
+        letter-spacing:2px;
+    }
+
+    .page2-box,
+    .page3-box{
+        margin-left:0;
+        max-width:100%;
+    }
+
+    .skills{
+        grid-template-columns:1fr;
+    }
+
+    .page2-box h2,
+    .page3-box h2{
+        font-size:45px;
+    }
+
+    button{
+        padding:14px 25px;
+    }
+
+}
+
 </style>
 </head>
 
+
 <body>
 
-<!-- HOME -->
-<section id="home" class="page">
 
-  <h1>Muhammed Nasih</h1>
+<!-- ================= PAGE 1 ================= -->
 
-  <p class="subtitle">
-    Editor • Computer
-  </p>
+<section id="page1" class="page active">
 
-  <div class="buttons">
-    <button class="explore" onclick="showDetails()">
-      Explore Now
-    </button>
+    <div class="page-number">
+        01 / HOME
+    </div>
 
-    <button class="play" onclick="openGame()">
-      🎮 Play
-    </button>
-  </div>
+    <div class="content page1-content">
+
+        <h1>MUHAMMED NASIH</h1>
+
+        <div class="role">
+            GAMER • CODER • COMPUTER • EDITOR
+        </div>
+
+        <p>
+            Welcome to my digital space.
+            Explore my interests in gaming, coding,
+            computers and creative work.
+        </p>
+
+        <button onclick="showPage(2)">
+            EXPLORE NOW
+        </button>
+
+    </div>
 
 </section>
 
 
-<!-- PROFILE -->
-<section id="details">
 
-  <div class="card">
+<!-- ================= PAGE 2 ================= -->
 
-    <h2>About Muhammed Nasih</h2>
+<section id="page2" class="page">
 
-    <p><b>Name:</b> Muhammed Nasih</p>
-    <p><b>Location:</b> Malappuram</p>
-    <p><b>Profession:</b> Editor, Computer</p>
-    <p><b>Skills:</b> Editing, Coding</p>
-    <p><b>Contact:</b> luxadesing10</p>
+    <div class="page-number">
+        02 / ABOUT
+    </div>
 
-    <button class="back" onclick="goHome()">
-      ← Back
-    </button>
+    <div class="content page2-box">
 
-  </div>
+        <h2>ABOUT NASIH</h2>
+
+        <div class="line"></div>
+
+        <p>
+            I enjoy exploring computers, learning coding,
+            gaming and working on creative digital projects.
+            Every project is another chance to learn something new.
+        </p>
+
+        <div class="skills">
+
+            <div class="skill">
+                <strong>GAMER</strong>
+                <span>
+                    Gaming for fun and learning from every challenge.
+                </span>
+            </div>
+
+            <div class="skill">
+                <strong>CODING</strong>
+                <span>
+                    Building ideas and learning programming step by step.
+                </span>
+            </div>
+
+            <div class="skill">
+                <strong>COMPUTER</strong>
+                <span>
+                    Exploring technology and understanding how computers work.
+                </span>
+            </div>
+
+            <div class="skill">
+                <strong>EDITOR</strong>
+                <span>
+                    Creating, designing and experimenting with digital content.
+                </span>
+            </div>
+
+        </div>
+
+        <p>
+            Stay curious. Keep learning. Keep creating.
+        </p>
+
+        <button class="back-button" onclick="showPage(1)">
+            BACK
+        </button>
+
+        <button class="next-button" onclick="showPage(3)">
+            NEXT
+        </button>
+
+    </div>
 
 </section>
 
 
-<!-- GAME -->
-<section id="gamePage">
 
-  <h2>🏎️ CAR RACE</h2>
+<!-- ================= PAGE 3 ================= -->
 
-  <div id="scoreboard">
-    <span>Score: <span id="score">0</span></span>
-    <span>Best: <span id="best">0</span></span>
-    <span id="level">Lvl 1</span>
-    <span id="hearts">❤❤❤</span>
-  </div>
+<section id="page3" class="page">
 
-  <div class="gameArea">
-
-    <canvas id="game" width="300" height="420"></canvas>
-
-    <div id="topBar">
-      <button onclick="togglePause()" id="pauseBtn">⏸</button>
-      <button onclick="toggleSound()" id="soundBtn">🔊</button>
+    <div class="page-number">
+        03 / PLAY
     </div>
 
-    <div id="overlay">
-      <h3>Game Over</h3>
-      <p id="finalScore"></p>
-      <button onclick="startGame()">Play Again</button>
+    <div class="content page3-box">
+
+        <div class="small-title">
+            WELCOME TO MY SPACE
+        </div>
+
+        <h2>
+            READY TO PLAY?
+        </h2>
+
+        <p>
+            Code it. Create it. Make it yours.
+            Keep learning, keep building and have some fun.
+        </p>
+
+        <div class="game-box">
+
+            <h3>CAR RACE</h3>
+
+            <p>
+                Take the wheel, avoid the obstacles
+                and try to beat your best score.
+            </p>
+
+            <button onclick="openGame()">
+                PLAY NOW
+            </button>
+
+        </div>
+
+        <br>
+
+        <button class="back-button" onclick="showPage(2)">
+            BACK
+        </button>
+
     </div>
-
-    <div id="pauseOverlay">
-      <h3>Paused</h3>
-      <button onclick="togglePause()">Resume</button>
-    </div>
-
-  </div>
-
-  <div id="controls">
-    <button onclick="moveLeft()">◀</button>
-    <button onclick="moveRight()">▶</button>
-  </div>
-
-  <button class="back" onclick="closeGame()">
-    ← Back to Profile
-  </button>
 
 </section>
+
 
 
 <script>
 
 /* PAGE NAVIGATION */
 
-function showDetails(){
-  home.style.display="none";
-  details.style.display="block";
+function showPage(number){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(function(page){
+
+            page.classList.remove("active");
+
+        });
+
+    document
+        .getElementById("page" + number)
+        .classList.add("active");
+
+    window.scrollTo(0,0);
 }
 
-function goHome(){
-  details.style.display="none";
-  gamePage.style.display="none";
-  home.style.display="flex";
-}
+
+/* OPEN CAR RACE */
 
 function openGame(){
-  home.style.display="none";
-  details.style.display="none";
-  gamePage.style.display="block";
-  startGame();
+
+    window.location.href = "car-race.html";
+
 }
-
-function closeGame(){
-  gameOver=true;
-  cancelAnimationFrame(loop);
-  gamePage.style.display="none";
-  home.style.display="flex";
-}
-
-
-/* CAR GAME */
-
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
-
-const W=300,H=420;
-const lanes=3;
-const laneW=W/lanes;
-
-let playerLane;
-let obstacles;
-let coins;
-let score;
-let best=Number(localStorage.getItem("carBest")||0);
-let lives;
-let speed;
-let loop;
-let spawn;
-let coinSpawn;
-let road;
-let gameOver;
-let paused;
-let sound=true;
-
-document.getElementById("best").textContent=best;
-
-
-function startGame(){
-
-  playerLane=1;
-  obstacles=[];
-  coins=[];
-  score=0;
-  lives=3;
-  speed=4;
-  spawn=0;
-  coinSpawn=0;
-  road=0;
-  gameOver=false;
-  paused=false;
-
-  document.getElementById("overlay").style.display="none";
-  document.getElementById("pauseOverlay").style.display="none";
-
-  updateUI();
-
-  cancelAnimationFrame(loop);
-  loop=requestAnimationFrame(gameLoop);
-}
-
-
-function updateUI(){
-
-  document.getElementById("score").textContent=score;
-  document.getElementById("best").textContent=best;
-
-  document.getElementById("level").textContent=
-    "Lvl "+(1+Math.floor(score/10));
-
-  document.getElementById("hearts").textContent=
-    "❤".repeat(lives)+"♡".repeat(3-lives);
-}
-
-
-function xPos(lane){
-  return lane*laneW+laneW/2-22;
-}
-
-
-function moveLeft(){
-  if(!paused && playerLane>0) playerLane--;
-}
-
-
-function moveRight(){
-  if(!paused && playerLane<2) playerLane++;
-}
-
-
-function spawnCar(){
-
-  obstacles.push({
-    lane:Math.floor(Math.random()*3),
-    y:-74,
-    color:["#ff5c5c","#5cb8ff","#7dff5c","#ff9d5c","#c95cff"]
-      [Math.floor(Math.random()*5)]
-  });
-}
-
-
-function spawnCoin(){
-
-  coins.push({
-    lane:Math.floor(Math.random()*3),
-    y:-20
-  });
-}
-
-
-function gameLoop(){
-
-  if(gameOver)return;
-
-  if(!paused){
-
-    spawn++;
-
-    if(spawn>Math.max(26,55-Math.floor(score/5))){
-      spawnCar();
-      spawn=0;
-    }
-
-    coinSpawn++;
-
-    if(coinSpawn>90){
-      if(Math.random()<.6)spawnCoin();
-      coinSpawn=0;
-    }
-
-    road=(road+speed)%40;
-
-    obstacles.forEach(o=>o.y+=speed);
-    coins.forEach(c=>c.y+=speed);
-
-    const playerY=H-90;
-    const px=xPos(playerLane);
-
-    obstacles=obstacles.filter(o=>{
-
-      if(o.y>H){
-        score++;
-        updateUI();
-        return false;
-      }
-
-      if(
-        o.lane===playerLane &&
-        o.y<playerY+74 &&
-        o.y+74>playerY
-      ){
-        lives--;
-        updateUI();
-
-        if(lives<=0){
-          endGame();
-        }
-
-        return false;
-      }
-
-      return true;
-    });
-
-
-    coins=coins.filter(c=>{
-
-      if(c.y>H)return false;
-
-      if(
-        c.lane===playerLane &&
-        c.y<playerY+74 &&
-        c.y+20>playerY
-      ){
-        score+=3;
-        updateUI();
-        return false;
-      }
-
-      return true;
-    });
-
-    speed=4+score*.08;
-
-    draw(px,playerY);
-  }
-
-  loop=requestAnimationFrame(gameLoop);
-}
-
-
-function drawCar(x,y,color){
-
-  ctx.fillStyle=color;
-  ctx.beginPath();
-  ctx.roundRect(x+2,y,40,74,10);
-  ctx.fill();
-
-  ctx.fillStyle="rgba(30,30,40,.8)";
-  ctx.fillRect(x+9,y+12,26,17);
-  ctx.fillRect(x+9,y+47,26,15);
-
-  ctx.fillStyle="#fff6c9";
-  ctx.fillRect(x+7,y+5,7,5);
-  ctx.fillRect(x+30,y+5,7,5);
-
-  ctx.fillStyle="#111";
-  ctx.fillRect(x-2,y+12,6,16);
-  ctx.fillRect(x+38,y+12,6,16);
-  ctx.fillRect(x-2,y+50,6,16);
-  ctx.fillRect(x+38,y+50,6,16);
-}
-
-
-function draw(px,py){
-
-  ctx.fillStyle="#333";
-  ctx.fillRect(0,0,W,H);
-
-  ctx.strokeStyle="#666";
-  ctx.lineWidth=3;
-  ctx.setLineDash([20,16]);
-
-  for(let i=1;i<3;i++){
-    ctx.beginPath();
-    ctx.moveTo(i*laneW,road-40);
-    ctx.lineTo(i*laneW,H);
-    ctx.stroke();
-  }
-
-  ctx.setLineDash([]);
-
-  coins.forEach(c=>{
-    const cx=xPos(c.lane)+22;
-
-    ctx.fillStyle="#ffd700";
-    ctx.beginPath();
-    ctx.arc(cx,c.y+10,9,0,Math.PI*2);
-    ctx.fill();
-  });
-
-  obstacles.forEach(o=>{
-    drawCar(xPos(o.lane),o.y,o.color);
-  });
-
-  drawCar(px,py,"#ffd700");
-}
-
-
-function endGame(){
-
-  gameOver=true;
-
-  if(score>best){
-    best=score;
-    localStorage.setItem("carBest",best);
-  }
-
-  updateUI();
-
-  document.getElementById("finalScore").textContent=
-    "Score: "+score;
-
-  document.getElementById("overlay").style.display="block";
-}
-
-
-function togglePause(){
-
-  if(gameOver)return;
-
-  paused=!paused;
-
-  document.getElementById("pauseOverlay").style.display=
-    paused?"block":"none";
-
-  document.getElementById("pauseBtn").textContent=
-    paused?"▶":"⏸";
-}
-
-
-function toggleSound(){
-
-  sound=!sound;
-
-  document.getElementById("soundBtn").textContent=
-    sound?"🔊":"🔇";
-}
-
-
-/* KEYBOARD */
-
-document.addEventListener("keydown",e=>{
-
-  if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")
-    moveLeft();
-
-  if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")
-    moveRight();
-
-  if(e.key===" ")
-    togglePause();
-});
-
-
-/* TOUCH SWIPE */
-
-let touchX=0;
-
-canvas.addEventListener("touchstart",e=>{
-  touchX=e.touches[0].clientX;
-});
-
-canvas.addEventListener("touchend",e=>{
-
-  const dx=e.changedTouches[0].clientX-touchX;
-
-  if(dx>25)moveRight();
-  else if(dx<-25)moveLeft();
-});
 
 </script>
+
 
 </body>
 </html>
